@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "project-testing"
+version = "0.1.3"
+description = ""
+authors = ["Alan Dani <>"]
+readme = "README.md"
+package-mode = false
+ 
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = "^0.35.0"
+fastapi = "^0.116.1"
+pydantic = {extras = ["email"], version = "^2.11.7"}
+pydantic-settings = "^2.10.1"
+sqlalchemy = "^2.0.41"
+alembic = "^1.16.4"
+azure-search-documents = "^11.5.3"
+langchain-openai = "^0.3.28"
+langchain-text-splitters = "^0.3.8"
+azure-storage-blob = "^12.26.0"
+pyjwt = "^2.10.1"
+pymupdf4llm = "^0.0.26"
+passlib = "^1.7.4"
+argon2-cffi = "^25.1.0"
+python-multipart = "^0.0.20"
+langchain-community = "^0.3.27"
+markdownify = "^1.1.0"
+markitdown = "^0.1.2"
+pptx2md = "^2.0.6"
+azure-identity = "^1.23.1"
+loguru = "^0.7.3"
+psycopg = {extras = ["binary", "pool"], version = "^3.2.9"}
+python-docx = "^1.2.0"
+langchain-experimental = "^0.3.4"
+pypdf = "^5.8.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-mock = "^3.14.1"
+pytest-cov = "^6.2.1"
+ 
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+ 
+[tool.pytest.ini_options]
+addopts = "-ra -q"
+python_files = [
+    "test_*.py",
+]
+testpaths = [
+    "test",
+]
+norecursedirs = [
+    ".*",
+    "build",
+    "dist",
+    "alembic",
+]
