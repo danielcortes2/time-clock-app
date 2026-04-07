@@ -7,11 +7,11 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    email = Column(String(255), unique=True, index=True)
+    hashed_password = Column(String(255))
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
-    full_name = Column(String)
+    full_name = Column(String(255))
 
 class TimeEntry(Base):
     __tablename__ = "time_entries"
@@ -31,8 +31,8 @@ class Schedule(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     # 0=Monday, 1=Tuesday, ..., 6=Sunday
     day_of_week = Column(Integer, nullable=False)
-    start_time = Column(String, nullable=False)  # "HH:MM" format
-    end_time = Column(String, nullable=False)    # "HH:MM" format
+    start_time = Column(String(10), nullable=False)  # "HH:MM" format
+    end_time = Column(String(10), nullable=False)    # "HH:MM" format
     is_active = Column(Boolean, default=True)
 
     user = relationship("User")
