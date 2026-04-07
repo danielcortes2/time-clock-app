@@ -56,31 +56,35 @@ time-clock-app/
 ## Installation & Setup
 
 ### Prerequisites
-- Python 3.11+ with conda/miniconda
+- Python 3.11+ with Poetry
 - Node.js 16+
 - npm or yarn
 
 ### Backend Setup
 
-1. **Create Python Environment**:
+1. **Install Poetry** (if not already installed):
    ```bash
-   conda create -n time-clock-env python=3.11
-   conda activate time-clock-env
+   curl -sSL https://install.python-poetry.org | python3 -
    ```
 
 2. **Install Dependencies**:
    ```bash
-   pip install fastapi uvicorn sqlalchemy alembic python-jose[cryptography] passlib[bcrypt] python-multipart pydantic pydantic-settings loguru
+   poetry install
    ```
 
-3. **Run Database Migrations**:
+3. **Activate Poetry Shell**:
+   ```bash
+   poetry shell
+   ```
+
+4. **Run Database Migrations**:
    ```bash
    alembic upgrade head
    ```
 
-4. **Start Backend Server**:
+5. **Start Backend Server**:
    ```bash
-   python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
 ### Frontend Setup
@@ -134,7 +138,7 @@ time-clock-app/
 ### Running Tests
 ```bash
 # Backend tests
-pytest
+poetry run pytest
 
 # Frontend tests
 cd frontend && npm test
