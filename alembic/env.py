@@ -5,8 +5,11 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from dotenv import load_dotenv
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 from app.config.db_settings import DbSettings
 settings = DbSettings()
