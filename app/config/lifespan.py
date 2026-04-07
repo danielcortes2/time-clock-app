@@ -38,7 +38,7 @@ def run_alembic_migrations():
         logger.info("Alembic migrations completed.")
     except Exception as e:
         logger.error(f"Error during Alembic migrations: {e}")
-        raise e
+        logger.warning("Migrations failed, continuing without them (tables will be created via SQLAlchemy)")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
