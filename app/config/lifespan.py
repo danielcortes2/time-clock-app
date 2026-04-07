@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from app.services.base_service import BaseService
-from app.db.database import SessionLocal, Base, engine
+from app.db.database import Base, get_engine
 
 # logging.basicConfig(level=logging.INFO)
 # log = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
     run_alembic_migrations()
 
     try:
-        Base.metadata.create_all(bind=engine)
+        Base.metadata.create_all(bind=get_engine())
         logger.info("Database tables verified/created.")
     except Exception as e:
         logger.error(f"Error creating database tables: {e}")

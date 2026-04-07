@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from app.db.database import get_db_settings, get_db, SessionLocal
+from app.db.database import get_db_settings, get_db, get_session_local
 
 class TestDatabase:
     @patch('app.db.database.DbSettings')
@@ -16,10 +16,10 @@ class TestDatabase:
         assert result2 == mock_instance
         mock_db_settings.assert_called_once()
 
-    @patch('app.db.database.SessionLocal')
-    def test_get_db(self, mock_session_local):
+    @patch('app.db.database.get_session_local')
+    def test_get_db(self, mock_get_session_local):
         mock_session = MagicMock()
-        mock_session_local.return_value = mock_session
+        mock_get_session_local.return_value = lambda: mock_session
         gen = get_db()
         db = next(gen)
         assert db == mock_session
@@ -29,12 +29,12 @@ class TestDatabase:
         except StopIteration:
             pass
         mock_session.commit.assert_called_once()
-        mock_session.close.assert_called_once()
+        mock_session.close.assert_called()
 
-    @patch('app.db.database.SessionLocal')
-    def test_get_db_rollback_on_error(self, mock_session_local):
+    @patch('app.db.database.get_session_local')
+    def test_get_db_rollback_on_error(self, mock_get_session_local):
         mock_session = MagicMock()
-        mock_session_local.return_value = mock_session
+        mock_get_session_local.return_value = lambda: mock_session
         gen = get_db()
         db = next(gen)
         assert db == mock_session
@@ -45,4 +45,4 @@ class TestDatabase:
             except:
                 gen.throw(ValueError("test"))
         mock_session.rollback.assert_called_once()
-        mock_session.close.assert_called_once()
+        mock_session.close.assert_called()

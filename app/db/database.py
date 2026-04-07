@@ -10,16 +10,26 @@ logger = logging.getLogger(__name__)
 def get_db_settings() -> DbSettings:
     return DbSettings()
 
-db_settings = get_db_settings()
-
-engine = create_engine(db_settings.database_url, echo=False) # Deja echo=False en producción
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
 
+_engine = None
+_SessionLocal = None
+
+def get_engine():
+    global _engine
+    if _engine is None:
+        db_settings = get_db_settings()
+        _engine = create_engine(db_settings.database_url, echo=False)
+    return _engine
+
+def get_session_local():
+    global _SessionLocal
+    if _SessionLocal is None:
+        _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
+    return _SessionLocal
+
 def get_db():
-    db = SessionLocal()
+    db = get_session_local()()
     try:
         yield db
         db.commit()
@@ -28,5 +38,6 @@ def get_db():
         logger.exception("Error during the database transaction, performing rollback.")
         raise
     finally:
+        db.close()
         db.close()        
         
