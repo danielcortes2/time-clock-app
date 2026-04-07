@@ -18,11 +18,13 @@ python-multipart = "^0.0.9"
 pydantic = {extras = ["email"], version = "^2.11.7"}
 pydantic-settings = "^2.10.1"
 loguru = "^0.7.3"
+openpyxl = "^3.1.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
 pytest-mock = "^3.14.1"
 pytest-cov = "^6.2.1"
+testcontainers = "^4.9.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -37,8 +39,6 @@ python_files = [
 python_functions = [
     "test_*"
 ]
-    "test_*.py",
-]
 testpaths = [
     "test",
 ]
@@ -47,4 +47,7 @@ norecursedirs = [
     "build",
     "dist",
     "alembic",
+]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
 ]

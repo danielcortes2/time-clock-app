@@ -4,6 +4,9 @@ from app.db.database import get_db
 from app.models.dto import User, TimeEntry
 from app.auth import get_current_user
 import datetime
+from fastapi.responses import StreamingResponse
+import io
+from openpyxl import Workbook
 
 router = APIRouter()
 
@@ -47,3 +50,43 @@ async def get_all_entries(current_user: User = Depends(get_current_user), db: Se
         raise HTTPException(status_code=403, detail="Not authorized")
     entries = db.query(TimeEntry).order_by(TimeEntry.clock_in).all()
     return [entry_to_dict(e) for e in entries]
+
+@router.get("/export-entries")
+async def export_entries(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    entries = db.query(TimeEntry).join(User).order_by(TimeEntry.clock_in).all()
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Time Entries"
+    
+    # Headers
+    ws['A1'] = 'User ID'
+    ws['B1'] = 'User Name'
+    ws['C1'] = 'User Email'
+    ws['D1'] = 'Clock In'
+    ws['E1'] = 'Clock Out'
+    ws['F1'] = 'Duration (hours)'
+    
+    for i, entry in enumerate(entries, start=2):
+        duration = None
+        if entry.clock_out:
+            duration = (entry.clock_out - entry.clock_in).total_seconds() / 3600
+        ws[f'A{i}'] = entry.user_id
+        ws[f'B{i}'] = entry.user.full_name or 'N/A'
+        ws[f'C{i}'] = entry.user.email
+        ws[f'D{i}'] = entry.clock_in.strftime('%Y-%m-%d %H:%M:%S') if entry.clock_in else ''
+        ws[f'E{i}'] = entry.clock_out.strftime('%Y-%m-%d %H:%M:%S') if entry.clock_out else ''
+        ws[f'F{i}'] = round(duration, 2) if duration else ''
+    
+    # Save to bytes
+    bio = io.BytesIO()
+    wb.save(bio)
+    bio.seek(0)
+    
+    return StreamingResponse(
+        bio,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers={"Content-Disposition": "attachment; filename=time_entries.xlsx"}
+    )

@@ -13,6 +13,18 @@ from app.routes.auth_controller import router as auth_router
 from app.routes.time_controller import router as time_router
 from app.routes.schedule_controller import router as schedule_router
 from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.base import BaseHTTPMiddleware
+
+# class StripPrefixMiddleware(BaseHTTPMiddleware):
+#     def __init__(self, app, prefix):
+#         super().__init__(app)
+#         self.prefix = prefix
+
+#     async def dispatch(self, request, call_next):
+#         if request.url.path.startswith(self.prefix):
+#             request.scope['path'] = request.url.path[len(self.prefix):]
+#             request.scope['raw_path'] = request.scope['raw_path'][len(self.prefix):]
+#         return await call_next(request)
 
 app = FastAPI()
 
@@ -25,6 +37,8 @@ app = FastAPI(
     description="Time clock application for employees",
     lifespan=lifespan
 )
+
+# app.add_middleware(StripPrefixMiddleware, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,

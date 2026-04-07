@@ -6,7 +6,7 @@ import {
   InputAdornment, Switch, FormControlLabel, ToggleButton,
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getAllEntries, createUser as apiCreateUser, getUsers, getUserSchedule, setUserSchedule } from '../api';
+import { getAllEntries, createUser as apiCreateUser, getUsers, getUserSchedule, setUserSchedule, deleteUser, exportEntries } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -24,6 +24,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const DEFAULT_SCHEDULE = DAYS.map((_, i) => ({
@@ -242,7 +244,7 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
 };
 
 // ─── User Row ────────────────────────────────────────────────────────────────
-const UserRow = ({ user, entries, index, onSchedule }) => {
+const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
   const [expanded, setExpanded] = useState(false);
   const userEntries = entries.filter(e => e.user_id === user.id);
   const isActive = userEntries.some(e => !e.clock_out);
@@ -321,6 +323,17 @@ const UserRow = ({ user, entries, index, onSchedule }) => {
                 </IconButton>
               </Tooltip>
             )}
+            {!user.is_superuser && (
+              <Tooltip title="Delete user">
+                <IconButton
+                  size="small"
+                  onClick={e => { e.stopPropagation(); onDelete(user); }}
+                  sx={{ color: '#FF6B35', '&:hover': { bgcolor: 'rgba(255,107,53,0.1)' } }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
             <IconButton size="small" sx={{ color: '#8BAFC7' }}>
               {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
@@ -389,7 +402,10 @@ const AdminDashboard = () => {
   const [creating, setCreating] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [formError, setFormError] = useState('');
-  const [scheduleTarget, setScheduleTarget] = useState(null); // user to edit schedule
+  const [scheduleTarget, setScheduleTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false); // user to edit schedule
   const navigate = useNavigate();
 
   const showSnackbar = (message, severity = 'success') =>
@@ -409,6 +425,41 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const blob = await exportEntries();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'time_entries.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      showSnackbar('Export completed', 'success');
+    } catch (err) {
+      showSnackbar('Failed to export data', 'error');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await deleteUser(deleteTarget.id);
+      showSnackbar(`User ${deleteTarget.full_name || deleteTarget.email} deleted`, 'success');
+      fetchData(); // Refresh data
+    } catch (err) {
+      showSnackbar(err.response?.data?.detail || 'Failed to delete user', 'error');
+    } finally {
+      setDeleting(false);
+      setDeleteTarget(null);
+    }
+  };
 
   const handleCreateUser = async () => {
     if (!newUser.email || !newUser.password || !newUser.full_name) {
@@ -460,6 +511,10 @@ const AdminDashboard = () => {
             sx={{ borderColor: 'rgba(0,212,255,0.4)', color: '#00D4FF', '&:hover': { borderColor: '#00D4FF', bgcolor: 'rgba(0,212,255,0.08)' } }}>
             New User
           </Button>
+          <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleExport} disabled={exporting}
+            sx={{ borderColor: 'rgba(0,230,118,0.4)', color: '#00E676', '&:hover': { borderColor: '#00E676', bgcolor: 'rgba(0,230,118,0.08)' } }}>
+            {exporting ? <CircularProgress size={18} color="inherit" /> : 'Export Excel'}
+          </Button>
           <Button variant="outlined" startIcon={<LogoutIcon />} onClick={logout}
             sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}>
             Logout
@@ -500,7 +555,7 @@ const AdminDashboard = () => {
             <AnimatePresence>
               {filteredUsers.map((user, i) => (
                 <UserRow key={user.id} user={user} entries={entries} index={i}
-                  onSchedule={setScheduleTarget} />
+                  onSchedule={setScheduleTarget} onDelete={setDeleteTarget} />
               ))}
             </AnimatePresence>
           )}
@@ -562,6 +617,30 @@ const AdminDashboard = () => {
         onSaved={fetchData}
         showSnackbar={showSnackbar}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!deleteTarget} onClose={() => setDeleteTarget(null)}
+        PaperProps={{ sx: { background: '#0A1929', border: '1px solid rgba(255,107,53,0.15)', borderRadius: 3 } }}>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <DeleteIcon sx={{ color: '#FF6B35' }} />
+          <Typography variant="h6" fontWeight={600}>Delete User</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography sx={{ color: '#E8F4FD' }}>
+            Are you sure you want to delete <strong>{deleteTarget?.full_name || deleteTarget?.email}</strong>?
+            This action cannot be undone and will remove all their time entries and schedules.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+          <Button onClick={() => setDeleteTarget(null)} sx={{ color: '#8BAFC7' }}>Cancel</Button>
+          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Button variant="contained" onClick={handleDeleteUser} disabled={deleting}
+              sx={{ background: 'linear-gradient(135deg, #FF6B35, #FF8A65)', px: 3 }}>
+              {deleting ? <CircularProgress size={18} color="inherit" /> : 'Delete'}
+            </Button>
+          </motion.div>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar open={snackbar.open} autoHideDuration={4000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}

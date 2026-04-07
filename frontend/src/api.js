@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -40,6 +40,16 @@ export const getMe = async () => {
 
 export const getUsers = async () => {
   const response = await api.get('/users');
+  return response.data;
+};
+
+export const deleteUser = async (userId) => {
+  const response = await api.delete(`/users/${userId}`);
+  return response.data;
+};
+
+export const exportEntries = async () => {
+  const response = await api.get('/export-entries', { responseType: 'blob' });
   return response.data;
 };
 
