@@ -1,70 +1,180 @@
-Perfecto. Aquí tienes el **README.md** corregido usando el nombre del repo **`template-estructure`** y una estructura ordenada y estándar, sin emoticonos:
+# Time Clock App
 
-```md
-# template-estructure
+A professional time clock application for employee management with FastAPI backend and React frontend.
 
-Repositorio plantilla para pruebas y proyectos básicos en Python.
+## Features
 
-## Descripción
-Este repositorio sirve como estructura base para el desarrollo de proyectos pequeños, prácticas académicas o pruebas de código.  
-Está pensado para mantener una organización clara y reutilizable.
+- **User Authentication**: JWT-based login system
+- **Employee Management**: Admin can create and manage employee accounts
+- **Time Tracking**: Clock in/out functionality with session tracking
+- **Schedule Management**: Admins can set weekly schedules for employees
+- **Dashboard Views**: Separate dashboards for admins and employees
+- **Real-time Clock**: Live session timer and clock display
+- **Professional UI**: Modern dark theme with animations
 
-## Tecnologías utilizadas
-- Lenguaje: Python  
-- Versión: Python 3.x  
+## Tech Stack
 
-## Estructura del proyecto
+### Backend
+- **FastAPI**: High-performance async web framework
+- **SQLAlchemy**: ORM for database operations
+- **SQLite**: Database for development
+- **JWT**: JSON Web Tokens for authentication
+- **Python-Jose**: JWT encoding/decoding
+- **Loguru**: Structured logging
+
+### Frontend
+- **React 19**: Modern React with hooks
+- **Material-UI (MUI)**: Component library with dark theme
+- **Axios**: HTTP client with interceptors
+- **Framer Motion**: Smooth animations
+- **React Router**: Client-side routing
+
+## Project Structure
+
+```
+time-clock-app/
+├── app/                          # FastAPI backend
+│   ├── main.py                   # Application entry point
+│   ├── auth.py                   # Authentication utilities
+│   ├── config/                   # Configuration modules
+│   ├── db/                       # Database setup
+│   ├── dto/                      # Data transfer objects
+│   ├── models/                   # SQLAlchemy models
+│   ├── routes/                   # API endpoints
+│   └── utils/                    # Utility functions
+├── frontend/                     # React frontend
+│   ├── src/
+│   │   ├── components/           # React components
+│   │   ├── api.js               # API client
+│   │   └── App.js               # Main app component
+│   └── package.json
+├── alembic/                      # Database migrations
+├── test/                         # Test files
+└── pyproject.toml               # Python dependencies
 ```
 
-template-estructure/
-│── .gitignore
-│── README.md
-│
-├── src/
-│   ├── **init**.py
-│   └── main.py
-│
-└── tests/
-└── test_main.py
+## Installation & Setup
 
-````
+### Prerequisites
+- Python 3.11+ with conda/miniconda
+- Node.js 16+
+- npm or yarn
 
-## Cómo ejecutar el proyecto
-1. Clona el repositorio:
+### Backend Setup
+
+1. **Create Python Environment**:
    ```bash
-   git clone https://github.com/danielcortes2/template-estructure.git
-````
-
-2. Accede al directorio:
-
-   ```bash
-   cd template-estructure
-   ```
-3. Ejecuta el archivo principal:
-
-   ```bash
-   python src/main.py
+   conda create -n time-clock-env python=3.11
+   conda activate time-clock-env
    ```
 
-## Objetivo
+2. **Install Dependencies**:
+   ```bash
+   pip install fastapi uvicorn sqlalchemy alembic python-jose[cryptography] passlib[bcrypt] python-multipart pydantic pydantic-settings loguru
+   ```
 
-* Proporcionar una estructura base reutilizable
-* Facilitar la organización de proyectos en Python
-* Practicar buenas prácticas básicas
+3. **Run Database Migrations**:
+   ```bash
+   alembic upgrade head
+   ```
 
-## Estado del proyecto
+4. **Start Backend Server**:
+   ```bash
+   python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
-Plantilla funcional para uso académico y personal.
+### Frontend Setup
 
-## Autor
+1. **Install Dependencies**:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Start Development Server**:
+   ```bash
+   PORT=5173 npm start
+   ```
+
+## Usage
+
+### Default Admin Account
+- **Email**: `admin@example.com`
+- **Password**: `adminpass`
+
+### API Endpoints
+
+- `POST /login` - User authentication
+- `POST /register` - User registration
+- `POST /create-user` - Admin creates new users
+- `GET /users` - Admin lists all users
+- `POST /clock-in` - Employee clocks in
+- `PUT /clock-out` - Employee clocks out
+- `GET /my-entries` - Employee views their time entries
+- `GET /all-entries` - Admin views all time entries
+- `GET /my-schedule` - Employee views their schedule
+- `PUT /schedules/{user_id}` - Admin sets employee schedule
+
+### Features Overview
+
+1. **Admin Dashboard**:
+   - View all employees and their status
+   - Create new employee accounts
+   - Set weekly schedules for employees
+   - View all time entries across the organization
+
+2. **Employee Dashboard**:
+   - Clock in/out with animated button
+   - View personal time entries
+   - See assigned weekly schedule
+   - Live session timer
+
+## Development
+
+### Running Tests
+```bash
+# Backend tests
+pytest
+
+# Frontend tests
+cd frontend && npm test
+```
+
+### Building for Production
+```bash
+# Frontend build
+cd frontend && npm run build
+
+# Backend can be deployed with uvicorn or gunicorn
+```
+
+## Configuration
+
+### Environment Variables
+Create a `.env` file in the root directory:
+
+```env
+SECRET_KEY=your-secret-key-here
+DATABASE_URL=sqlite:///./time_clock.db
+```
+
+### CORS Configuration
+The backend is configured to allow requests from:
+- `http://localhost:3000` (default React port)
+- `http://localhost:5173` (Vite default port)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests
+5. Submit a pull request
+
+## License
+
+This project is for educational purposes.
+
+## Author
 
 Daniel Cortés Casadas
-
-## Licencia
-
-Proyecto de uso educativo.
-
-```
-
-Si quieres que la estructura sea **aún más simple** (por ejemplo, sin `tests/`) o que copie **exactamente** lo que usas en clase, dime y lo ajustamos.
-```

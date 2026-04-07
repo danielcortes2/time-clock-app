@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from app.services.base_service import BaseService
-from app.db.database import SessionLocal
+from app.db.database import SessionLocal, Base, engine
 
 # logging.basicConfig(level=logging.INFO)
 # log = logging.getLogger(__name__)
@@ -45,6 +45,8 @@ async def lifespan(app: FastAPI):
     logger.info("Starting the application...")
 
     run_alembic_migrations()
+
+    Base.metadata.create_all(bind=engine)
 
     yield
 
