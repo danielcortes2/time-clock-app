@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class DbSettings(BaseSettings):
     model_config = SettingsConfigDict(populate_by_name=True, extra='forbid')
     
-    database_engine: str = Field(default="postgresql",alias='DATABASE_ENGINE')
+    database_engine: str = Field(default="sqlite",alias='DATABASE_ENGINE')
     database_host: str = Field(default="", alias='DATABASE_HOST')
     database_port: int = Field(default=0, alias='DATABASE_PORT')
     database_name: str = Field(default="time_clock.db", alias='DATABASE_NAME')

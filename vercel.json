@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "env": {
+    "DATABASE_ENGINE": "sqlite",
+    "DATABASE_NAME": "time_clock.db"
+  },
   "builds": [
     {
       "src": "frontend/package.json",
