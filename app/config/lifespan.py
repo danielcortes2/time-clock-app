@@ -46,7 +46,12 @@ async def lifespan(app: FastAPI):
 
     run_alembic_migrations()
 
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables verified/created.")
+    except Exception as e:
+        logger.error(f"Error creating database tables: {e}")
+        logger.warning("Continuing without table creation.")
 
     yield
 

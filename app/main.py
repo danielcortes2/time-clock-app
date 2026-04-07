@@ -53,7 +53,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(health_controller)
-app.include_router(auth_router)
-app.include_router(time_router)
-app.include_router(schedule_router)
+app.include_router(health_controller, prefix="/api")
+app.include_router(auth_router, prefix="/api")
+app.include_router(time_router, prefix="/api")
+app.include_router(schedule_router, prefix="/api")
