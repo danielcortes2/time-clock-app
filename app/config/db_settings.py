@@ -11,7 +11,7 @@ class DbSettings(BaseSettings):
     mysql_user: str = Field(default="", alias='MYSQL_USER')
     mysql_password: str = Field(default="", alias='MYSQL_PASSWORD')
     
-    # Legacy fields for backward compatibility
+    # Default to mysql if MySQL variables are present
     database_engine: str = Field(default="mysql", alias='DATABASE_ENGINE')
     database_host: str = Field(default="", alias='DATABASE_HOST')
     database_port: int = Field(default=3306, alias='DATABASE_PORT')

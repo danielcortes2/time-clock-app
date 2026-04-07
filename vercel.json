@@ -1,13 +1,5 @@
 {
   "version": 2,
-  "env": {
-    "MYSQL_HOST": "auth-db480.hstgr.io",
-    "MYSQL_PORT": "3306",
-    "MYSQL_DB_NAME": "u347771956_timeclock",
-    "MYSQL_USER": "u347771956_timeclock",
-    "MYSQL_PASSWORD": "Dc.54850241",
-    "DATABASE_ENGINE": "mysql"
-  },
   "builds": [
     {
       "src": "frontend/package.json",
