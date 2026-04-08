@@ -53,6 +53,7 @@ const theme = createTheme({
           textTransform: 'none',
           fontWeight: 600,
           borderRadius: 8,
+          fontSize: '0.875rem',
         },
       },
     },
@@ -74,6 +75,7 @@ const theme = createTheme({
         },
       },
     },
+
   },
 });
 

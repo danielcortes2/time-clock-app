@@ -4,6 +4,7 @@ import {
   Avatar, Chip, IconButton, Tooltip, Collapse, CircularProgress, Alert, Snackbar,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
   InputAdornment, Switch, FormControlLabel, ToggleButton,
+  useTheme, useMediaQuery,
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllEntries, createUser as apiCreateUser, getUsers, getUserSchedule, setUserSchedule, deleteUser, exportEntries } from '../api';
@@ -40,26 +41,26 @@ const StatCard = ({ icon, label, value, color, delay }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.4 }}
-    style={{ flex: 1, minWidth: 160 }}
+    style={{ flex: 1, minWidth: 140 }}
   >
     <Box
       sx={{
         background: 'linear-gradient(135deg, rgba(13,33,55,0.9), rgba(10,25,41,0.9))',
         border: `1px solid ${color}30`,
         borderRadius: 3,
-        p: 2.5,
+        p: { xs: 1.5, sm: 2.5 },
         display: 'flex',
         alignItems: 'center',
-        gap: 2,
+        gap: { xs: 1, sm: 2 },
         boxShadow: `0 4px 20px ${color}15`,
       }}
     >
-      <Box sx={{ p: 1.2, borderRadius: 2, background: `${color}20`, display: 'flex' }}>
-        {React.cloneElement(icon, { sx: { color, fontSize: 28 } })}
+      <Box sx={{ p: { xs: 0.8, sm: 1.2 }, borderRadius: 2, background: `${color}20`, display: 'flex' }}>
+        {React.cloneElement(icon, { sx: { color, fontSize: { xs: 20, sm: 28 } } })}
       </Box>
       <Box>
-        <Typography variant="h4" fontWeight={700} sx={{ color, lineHeight: 1 }}>{value}</Typography>
-        <Typography variant="caption" sx={{ color: '#8BAFC7' }}>{label}</Typography>
+        <Typography variant="h4" fontWeight={700} sx={{ color, lineHeight: 1, fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>{value}</Typography>
+        <Typography variant="caption" sx={{ color: '#8BAFC7', fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>{label}</Typography>
       </Box>
     </Box>
   </motion.div>
@@ -70,6 +71,8 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
   const [rows, setRows] = useState(DEFAULT_SCHEDULE.map(d => ({ ...d })));
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (!open || !user) return;
@@ -117,11 +120,12 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
       onClose={onClose}
       maxWidth="sm"
       fullWidth
+      fullScreen={fullScreen}
       PaperProps={{
         sx: {
           background: '#0A1929',
-          border: '1px solid rgba(0,212,255,0.15)',
-          borderRadius: 3,
+          border: fullScreen ? 'none' : '1px solid rgba(0,212,255,0.15)',
+          borderRadius: fullScreen ? 0 : 3,
         },
       }}
     >
@@ -158,14 +162,15 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 1.5,
+                    gap: { xs: 1, sm: 1.5 },
                     py: 1.2,
-                    px: 1.5,
+                    px: { xs: 1, sm: 1.5 },
                     mb: 0.5,
                     borderRadius: 2,
                     background: row.is_active ? 'rgba(0,212,255,0.05)' : 'rgba(255,255,255,0.02)',
                     border: `1px solid ${row.is_active ? 'rgba(0,212,255,0.15)' : 'rgba(255,255,255,0.04)'}`,
                     transition: 'all 0.2s',
+                    flexWrap: { xs: 'wrap', sm: 'nowrap' },
                   }}
                 >
                   {/* Day toggle */}
@@ -196,7 +201,7 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
                     onChange={e => updateRow(i, 'start_time', e.target.value)}
                     disabled={!row.is_active}
                     inputProps={{ style: { fontSize: 13, padding: '6px 8px', colorScheme: 'dark' } }}
-                    sx={{ width: 110 }}
+                    sx={{ width: { xs: '100px', sm: '110px' } }}
                   />
                   <Typography sx={{ color: '#8BAFC7', fontSize: 13 }}>to</Typography>
                   <TextField
@@ -206,7 +211,7 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
                     onChange={e => updateRow(i, 'end_time', e.target.value)}
                     disabled={!row.is_active}
                     inputProps={{ style: { fontSize: 13, padding: '6px 8px', colorScheme: 'dark' } }}
-                    sx={{ width: 110 }}
+                    sx={{ width: { xs: '100px', sm: '110px' } }}
                   />
 
                   {/* Hours label */}
@@ -280,25 +285,27 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            p: 2,
+            p: { xs: 1.5, sm: 2 },
             cursor: 'pointer',
             '&:hover': { background: 'rgba(0,212,255,0.04)' },
+            flexWrap: 'wrap',
+            gap: 1,
           }}
           onClick={() => setExpanded(!expanded)}
         >
-          <Avatar sx={{ bgcolor: `${color}30`, color, fontWeight: 700, mr: 2, width: 40, height: 40, fontSize: 14 }}>
+          <Avatar sx={{ bgcolor: `${color}30`, color, fontWeight: 700, mr: { xs: 1, sm: 2 }, width: { xs: 32, sm: 40 }, height: { xs: 32, sm: 40 }, fontSize: { xs: 12, sm: 14 } }}>
             {initials}
           </Avatar>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="body1" fontWeight={600} sx={{ color: '#E8F4FD' }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="body1" fontWeight={600} sx={{ color: '#E8F4FD', fontSize: { xs: '0.9rem', sm: '1rem' } }}>
               {user.full_name || 'No name'}
             </Typography>
-            <Typography variant="caption" sx={{ color: '#8BAFC7' }}>{user.email}</Typography>
+            <Typography variant="caption" sx={{ color: '#8BAFC7', fontSize: { xs: '0.75rem', sm: '0.8rem' } }}>{user.email}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 }, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {user.is_superuser && (
-              <Chip label="Admin" size="small" icon={<AdminPanelSettingsIcon />}
-                sx={{ bgcolor: 'rgba(124,77,255,0.2)', color: '#7C4DFF', borderColor: 'rgba(124,77,255,0.3)', border: '1px solid' }} />
+              <Chip label="Admin" size="small" icon={<AdminPanelSettingsIcon />} 
+                sx={{ bgcolor: 'rgba(124,77,255,0.2)', color: '#7C4DFF', borderColor: 'rgba(124,77,255,0.3)', border: '1px solid', fontSize: { xs: '0.7rem', sm: '0.75rem' } }} />
             )}
             <Chip
               label={isActive ? 'Clocked In' : 'Offline'}
@@ -307,9 +314,10 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
               sx={{
                 bgcolor: isActive ? 'rgba(0,230,118,0.15)' : 'rgba(139,175,199,0.15)',
                 color: isActive ? '#00E676' : '#8BAFC7',
+                fontSize: { xs: '0.7rem', sm: '0.75rem' },
               }}
             />
-            <Typography variant="caption" sx={{ color: '#8BAFC7', minWidth: 60, textAlign: 'right' }}>
+            <Typography variant="caption" sx={{ color: '#8BAFC7', minWidth: 60, textAlign: 'right', fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
               {totalHours}h total
             </Typography>
             {!user.is_superuser && (
@@ -317,7 +325,7 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
                 <IconButton
                   size="small"
                   onClick={e => { e.stopPropagation(); onSchedule(user); }}
-                  sx={{ color: '#00D4FF', '&:hover': { bgcolor: 'rgba(0,212,255,0.1)' } }}
+                  sx={{ color: '#00D4FF', '&:hover': { bgcolor: 'rgba(0,212,255,0.1)' }, p: { xs: 0.5, sm: 1 } }}
                 >
                   <CalendarMonthIcon fontSize="small" />
                 </IconButton>
@@ -328,13 +336,13 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
                 <IconButton
                   size="small"
                   onClick={e => { e.stopPropagation(); onDelete(user); }}
-                  sx={{ color: '#FF6B35', '&:hover': { bgcolor: 'rgba(255,107,53,0.1)' } }}
+                  sx={{ color: '#FF6B35', '&:hover': { bgcolor: 'rgba(255,107,53,0.1)' }, p: { xs: 0.5, sm: 1 } }}
                 >
                   <DeleteIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             )}
-            <IconButton size="small" sx={{ color: '#8BAFC7' }}>
+            <IconButton size="small" sx={{ color: '#8BAFC7', p: { xs: 0.5, sm: 1 } }}>
               {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
           </Box>
@@ -345,14 +353,14 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
             {userEntries.length === 0 ? (
               <Typography variant="body2" sx={{ color: '#8BAFC7', py: 1, pl: 7 }}>No entries yet</Typography>
             ) : (
-              <TableContainer component={Paper} sx={{ background: 'rgba(5,13,26,0.5)', borderRadius: 2 }}>
+              <TableContainer component={Paper} sx={{ background: 'rgba(5,13,26,0.5)', borderRadius: 2, overflowX: 'auto' }}>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)' }}>Clock In</TableCell>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)' }}>Clock Out</TableCell>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)' }}>Duration</TableCell>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)' }}>Status</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Clock In</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Clock Out</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Duration</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Status</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -362,19 +370,19 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
                         : '—';
                       return (
                         <TableRow key={entry.id} sx={{ '&:last-child td': { border: 0 } }}>
-                          <TableCell sx={{ color: '#E8F4FD', borderColor: 'rgba(255,255,255,0.05)', fontSize: 13 }}>
+                          <TableCell sx={{ color: '#E8F4FD', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>
                             {new Date(entry.clock_in).toLocaleString()}
                           </TableCell>
-                          <TableCell sx={{ color: '#E8F4FD', borderColor: 'rgba(255,255,255,0.05)', fontSize: 13 }}>
+                          <TableCell sx={{ color: '#E8F4FD', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>
                             {entry.clock_out ? new Date(entry.clock_out).toLocaleString() : '—'}
                           </TableCell>
-                          <TableCell sx={{ color: '#00D4FF', borderColor: 'rgba(255,255,255,0.05)', fontSize: 13 }}>
+                          <TableCell sx={{ color: '#00D4FF', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>
                             {duration}
                           </TableCell>
                           <TableCell sx={{ borderColor: 'rgba(255,255,255,0.05)' }}>
                             {!entry.clock_out
-                              ? <Chip label="Active" size="small" sx={{ bgcolor: 'rgba(0,230,118,0.2)', color: '#00E676', fontSize: 11 }} />
-                              : <Chip label="Done" size="small" sx={{ bgcolor: 'rgba(139,175,199,0.1)', color: '#8BAFC7', fontSize: 11 }} />
+                              ? <Chip label="Active" size="small" sx={{ bgcolor: 'rgba(0,230,118,0.2)', color: '#00E676', fontSize: { xs: '0.65rem', sm: '0.75rem' } }} />
+                              : <Chip label="Done" size="small" sx={{ bgcolor: 'rgba(139,175,199,0.1)', color: '#8BAFC7', fontSize: { xs: '0.65rem', sm: '0.75rem' } }} />
                             }
                           </TableCell>
                         </TableRow>
@@ -405,8 +413,10 @@ const AdminDashboard = () => {
   const [scheduleTarget, setScheduleTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [exporting, setExporting] = useState(false); // user to edit schedule
+  const [exporting, setExporting] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const showSnackbar = (message, severity = 'success') =>
     setSnackbar({ open: true, message, severity });
@@ -498,33 +508,88 @@ const AdminDashboard = () => {
       <motion.div initial={{ y: -60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.4 }}>
         <Box sx={{
           background: 'rgba(10,25,41,0.95)', backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(0,212,255,0.1)', px: 3, py: 1.5,
-          display: 'flex', alignItems: 'center', gap: 2,
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(0,212,255,0.1)',
+          px: { xs: 2, sm: 3 }, py: 1.5,
+          display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 2 },
           position: 'sticky', top: 0, zIndex: 100,
         }}>
-          <AccessTimeIcon sx={{ color: '#00D4FF', fontSize: 28 }} />
-          <Typography variant="h6" fontWeight={700} sx={{ color: '#E8F4FD', flex: 1 }}>
-            TimeClock <Typography component="span" variant="caption" sx={{ color: '#8BAFC7', ml: 1 }}>Admin</Typography>
+          <AccessTimeIcon sx={{ color: '#00D4FF', fontSize: { xs: 22, sm: 28 } }} />
+          <Typography
+            variant="h6" fontWeight={700}
+            sx={{ color: '#E8F4FD', flex: 1, fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          >
+            TimeClock
+            <Typography component="span" variant="caption" sx={{ color: '#8BAFC7', ml: 1 }}>Admin</Typography>
           </Typography>
-          <Tooltip title="Refresh"><IconButton onClick={fetchData} sx={{ color: '#8BAFC7' }}><RefreshIcon /></IconButton></Tooltip>
-          <Button variant="outlined" startIcon={<PersonAddIcon />} onClick={() => setCreateDialogOpen(true)}
-            sx={{ borderColor: 'rgba(0,212,255,0.4)', color: '#00D4FF', '&:hover': { borderColor: '#00D4FF', bgcolor: 'rgba(0,212,255,0.08)' } }}>
-            New User
-          </Button>
-          <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleExport} disabled={exporting}
-            sx={{ borderColor: 'rgba(0,230,118,0.4)', color: '#00E676', '&:hover': { borderColor: '#00E676', bgcolor: 'rgba(0,230,118,0.08)' } }}>
-            {exporting ? <CircularProgress size={18} color="inherit" /> : 'Export Excel'}
-          </Button>
-          <Button variant="outlined" startIcon={<LogoutIcon />} onClick={logout}
-            sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}>
-            Logout
-          </Button>
+
+          {/* Refresh */}
+          <Tooltip title="Refresh">
+            <IconButton onClick={fetchData} size={isMobile ? 'small' : 'medium'} sx={{ color: '#8BAFC7' }}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+
+          {/* New User — icon-only on mobile */}
+          <Tooltip title="New User">
+            {isMobile ? (
+              <IconButton
+                size="small"
+                onClick={() => setCreateDialogOpen(true)}
+                sx={{ color: '#00D4FF', border: '1px solid rgba(0,212,255,0.4)', borderRadius: 2, p: 0.8 }}
+              >
+                <PersonAddIcon fontSize="small" />
+              </IconButton>
+            ) : (
+              <Button variant="outlined" startIcon={<PersonAddIcon />} onClick={() => setCreateDialogOpen(true)}
+                sx={{ borderColor: 'rgba(0,212,255,0.4)', color: '#00D4FF', '&:hover': { borderColor: '#00D4FF', bgcolor: 'rgba(0,212,255,0.08)' } }}>
+                New User
+              </Button>
+            )}
+          </Tooltip>
+
+          {/* Export — icon-only on mobile */}
+          <Tooltip title="Export Excel">
+            {isMobile ? (
+              <IconButton
+                size="small"
+                onClick={handleExport}
+                disabled={exporting}
+                sx={{ color: '#00E676', border: '1px solid rgba(0,230,118,0.4)', borderRadius: 2, p: 0.8 }}
+              >
+                {exporting ? <CircularProgress size={16} color="inherit" /> : <DownloadIcon fontSize="small" />}
+              </IconButton>
+            ) : (
+              <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleExport} disabled={exporting}
+                sx={{ borderColor: 'rgba(0,230,118,0.4)', color: '#00E676', '&:hover': { borderColor: '#00E676', bgcolor: 'rgba(0,230,118,0.08)' } }}>
+                {exporting ? <CircularProgress size={18} color="inherit" /> : 'Export Excel'}
+              </Button>
+            )}
+          </Tooltip>
+
+          {/* Logout — icon-only on mobile */}
+          <Tooltip title="Logout">
+            {isMobile ? (
+              <IconButton
+                size="small"
+                onClick={logout}
+                sx={{ color: '#FF5252', border: '1px solid rgba(255,82,82,0.4)', borderRadius: 2, p: 0.8 }}
+              >
+                <LogoutIcon fontSize="small" />
+              </IconButton>
+            ) : (
+              <Button variant="outlined" startIcon={<LogoutIcon />} onClick={logout}
+                sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}>
+                Logout
+              </Button>
+            )}
+          </Tooltip>
         </Box>
       </motion.div>
 
-      <Box sx={{ maxWidth: 1000, mx: 'auto', px: 3, py: 4 }}>
+      <Box sx={{ maxWidth: 1000, mx: 'auto', px: { xs: 2, sm: 3 }, py: { xs: 2, sm: 4 } }}>
         {/* Stat Cards */}
-        <Box sx={{ display: 'flex', gap: 2, mb: 4, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, mb: 4, flexWrap: 'wrap', justifyContent: 'center' }}>
           <StatCard icon={<PeopleIcon />} label="Total Users" value={usersList.length} color="#00D4FF" delay={0.1} />
           <StatCard icon={<CheckCircleIcon />} label="Clocked In Now" value={activeNow} color="#00E676" delay={0.15} />
           <StatCard icon={<AccessTimeIcon />} label="Entries Today" value={todayEntries} color="#7C4DFF" delay={0.2} />
@@ -532,13 +597,13 @@ const AdminDashboard = () => {
 
         {/* Users & Entries */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 2 }}>
             <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD' }}>Employees</Typography>
             <TextField
               size="small" placeholder="Search..." value={search}
               onChange={e => setSearch(e.target.value)}
               InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: '#8BAFC7', fontSize: 18 }} /></InputAdornment> }}
-              sx={{ width: 220 }}
+              sx={{ width: { xs: '100%', sm: 220 } }}
             />
           </Box>
 
@@ -563,8 +628,14 @@ const AdminDashboard = () => {
       </Box>
 
       {/* Create User Dialog */}
-      <Dialog open={createDialogOpen} onClose={() => { setCreateDialogOpen(false); setFormError(''); }}
-        PaperProps={{ sx: { background: '#0A1929', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 3, minWidth: 400 } }}>
+      <Dialog
+        open={createDialogOpen}
+        onClose={() => { setCreateDialogOpen(false); setFormError(''); }}
+        fullScreen={isMobile}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{ sx: { background: '#0A1929', border: isMobile ? 'none' : '1px solid rgba(0,212,255,0.15)', borderRadius: isMobile ? 0 : 3 } }}
+      >
         <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <PersonAddIcon sx={{ color: '#00D4FF' }} />
           <Typography variant="h6" fontWeight={600}>Create New Employee</Typography>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  Box, Typography, Button, Avatar, Chip, CircularProgress, Snackbar, Alert,
+  Box, Typography, Button, IconButton, Avatar, Chip, CircularProgress, Snackbar, Alert,
+  useTheme, useMediaQuery,
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getMyEntries, clockIn, clockOut, getMe, getMySchedule } from '../api';
@@ -33,19 +34,20 @@ const StatCard = ({ icon, label, value, color }) => (
       background: 'rgba(13,33,55,0.7)',
       border: `1px solid ${color}25`,
       borderRadius: 3,
-      p: 2.5,
+      p: { xs: 1.5, sm: 2.5 },
       display: 'flex',
       alignItems: 'center',
-      gap: 2,
-      flex: 1,
+      gap: { xs: 1, sm: 2 },
+      flex: '1 1 0',
+      minWidth: { xs: 90, sm: 120 },
     }}
   >
-    <Box sx={{ p: 1, borderRadius: 2, background: `${color}20`, display: 'flex' }}>
-      {React.cloneElement(icon, { sx: { color, fontSize: 24 } })}
+    <Box sx={{ p: { xs: 0.8, sm: 1 }, borderRadius: 2, background: `${color}20`, display: 'flex', flexShrink: 0 }}>
+      {React.cloneElement(icon, { sx: { color, fontSize: { xs: 18, sm: 24 } } })}
     </Box>
-    <Box>
-      <Typography variant="h5" fontWeight={700} sx={{ color, lineHeight: 1 }}>{value}</Typography>
-      <Typography variant="caption" sx={{ color: '#8BAFC7' }}>{label}</Typography>
+    <Box sx={{ minWidth: 0 }}>
+      <Typography fontWeight={700} sx={{ color, lineHeight: 1, fontSize: { xs: '1rem', sm: '1.25rem' } }}>{value}</Typography>
+      <Typography variant="caption" sx={{ color: '#8BAFC7', fontSize: { xs: '0.65rem', sm: '0.75rem' } }}>{label}</Typography>
     </Box>
   </Box>
 );
@@ -63,6 +65,8 @@ const UserDashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const timerRef = useRef(null);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Clock tick
   useEffect(() => {
@@ -145,35 +149,47 @@ const UserDashboard = () => {
           sx={{
             background: 'rgba(10,25,41,0.95)',
             backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             borderBottom: '1px solid rgba(0,212,255,0.1)',
-            px: 3, py: 1.5,
-            display: 'flex', alignItems: 'center', gap: 2,
+            px: { xs: 2, sm: 3 }, py: 1.5,
+            display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 },
             position: 'sticky', top: 0, zIndex: 100,
+            flexWrap: 'wrap',
           }}
         >
           <AccessTimeIcon sx={{ color: '#00D4FF', fontSize: 28 }} />
-          <Typography variant="h6" fontWeight={700} sx={{ color: '#E8F4FD', flex: 1 }}>
+          <Typography variant="h6" fontWeight={700} sx={{ color: '#E8F4FD', flex: 1, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>
             TimeClock
           </Typography>
-          <Avatar sx={{ bgcolor: 'rgba(0,212,255,0.2)', color: '#00D4FF', width: 34, height: 34, fontSize: 14, fontWeight: 700 }}>
+          <Avatar sx={{ bgcolor: 'rgba(0,212,255,0.2)', color: '#00D4FF', width: { xs: 28, sm: 34 }, height: { xs: 28, sm: 34 }, fontSize: { xs: 12, sm: 14 }, fontWeight: 700 }}>
             {initials}
           </Avatar>
           <Typography variant="body2" sx={{ color: '#8BAFC7', display: { xs: 'none', sm: 'block' } }}>
             {user?.full_name || user?.email}
           </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<LogoutIcon />}
-            onClick={() => { localStorage.removeItem('token'); navigate('/'); }}
-            size="small"
-            sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}
-          >
-            Logout
-          </Button>
+          {isMobile ? (
+            <IconButton
+              onClick={() => { localStorage.removeItem('token'); navigate('/'); }}
+              size="small"
+              sx={{ color: '#FF5252', border: '1px solid rgba(255,82,82,0.4)', borderRadius: 2, p: '6px', '&:hover': { bgcolor: 'rgba(255,82,82,0.08)', borderColor: '#FF5252' } }}
+            >
+              <LogoutIcon fontSize="small" />
+            </IconButton>
+          ) : (
+            <Button
+              variant="outlined"
+              startIcon={<LogoutIcon />}
+              onClick={() => { localStorage.removeItem('token'); navigate('/'); }}
+              size="small"
+              sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}
+            >
+              Logout
+            </Button>
+          )}
         </Box>
       </motion.div>
 
-      <Box sx={{ maxWidth: 700, mx: 'auto', px: 3, py: 4 }}>
+      <Box sx={{ maxWidth: 700, mx: 'auto', px: { xs: 2, sm: 3 }, py: { xs: 2, sm: 4 } }}>
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', pt: 12 }}>
             <CircularProgress sx={{ color: '#00D4FF' }} />
@@ -182,11 +198,11 @@ const UserDashboard = () => {
           <>
             {/* Greeting */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <Box sx={{ mb: 4 }}>
-                <Typography variant="h4" fontWeight={700} sx={{ color: '#E8F4FD' }}>
+              <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+                <Typography variant="h4" fontWeight={700} sx={{ color: '#E8F4FD', fontSize: { xs: '1.75rem', sm: '2.125rem' } }}>
                   {greeting}, {user?.full_name?.split(' ')[0] || 'there'} 👋
                 </Typography>
-                <Typography variant="body1" sx={{ color: '#8BAFC7', mt: 0.5 }}>
+                <Typography variant="body1" sx={{ color: '#8BAFC7', mt: 0.5, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                   {currentTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                   {' · '}
                   <Typography component="span" sx={{ color: '#00D4FF', fontWeight: 600 }}>
@@ -203,8 +219,8 @@ const UserDashboard = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  py: 5,
-                  mb: 4,
+                  py: { xs: 3, sm: 5 },
+                  mb: { xs: 3, sm: 4 },
                   background: isClockedIn
                     ? 'linear-gradient(135deg, rgba(0,230,118,0.06), rgba(13,33,55,0.9))'
                     : 'linear-gradient(135deg, rgba(0,212,255,0.06), rgba(13,33,55,0.9))',
@@ -235,8 +251,8 @@ const UserDashboard = () => {
                     onClick={handleClock}
                     disabled={actionLoading}
                     style={{
-                      width: 140,
-                      height: 140,
+                      width: isMobile ? 120 : 140,
+                      height: isMobile ? 120 : 140,
                       borderRadius: '50%',
                       border: 'none',
                       cursor: actionLoading ? 'wait' : 'pointer',
@@ -261,10 +277,10 @@ const UserDashboard = () => {
                     ) : (
                       <>
                         {isClockedIn
-                          ? <LogoutIcon sx={{ fontSize: 40, color: 'white' }} />
-                          : <LoginIcon sx={{ fontSize: 40, color: 'white' }} />
+                          ? <LogoutIcon sx={{ fontSize: { xs: 32, sm: 40 }, color: 'white' }} />
+                          : <LoginIcon sx={{ fontSize: { xs: 32, sm: 40 }, color: 'white' }} />
                         }
-                        <Typography variant="caption" fontWeight={700} sx={{ color: 'white', fontSize: 13, letterSpacing: 1, textTransform: 'uppercase' }}>
+                        <Typography variant="caption" fontWeight={700} sx={{ color: 'white', fontSize: { xs: 11, sm: 13 }, letterSpacing: 1, textTransform: 'uppercase' }}>
                           {isClockedIn ? 'Clock Out' : 'Clock In'}
                         </Typography>
                       </>
@@ -303,7 +319,7 @@ const UserDashboard = () => {
 
             {/* Stats */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <Box sx={{ display: 'flex', gap: 2, mb: 4, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, mb: 4, flexWrap: 'wrap', justifyContent: 'center' }}>
                 <StatCard icon={<CalendarTodayIcon />} label="Today's Hours" value={formatHours(todayMs)} color="#00D4FF" />
                 <StatCard icon={<TimerIcon />} label="This Week" value={formatHours(weeklyMs)} color="#7C4DFF" />
                 <StatCard icon={<HistoryIcon />} label="Total Entries" value={entries.length} color="#00E676" />
@@ -318,7 +334,7 @@ const UserDashboard = () => {
                     <CalendarMonthIcon sx={{ color: '#00D4FF', fontSize: 20 }} />
                     <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD' }}>My Schedule</Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  <Box sx={{ display: 'flex', gap: { xs: 0.5, sm: 1 }, flexWrap: 'wrap', justifyContent: 'center' }}>
                     {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day, i) => {
                       const entry = schedule.find(s => s.day_of_week === i);
                       // JS getDay(): 0=Sun,1=Mon...6=Sat => our i: 0=Mon...6=Sun
@@ -330,7 +346,7 @@ const UserDashboard = () => {
                         <Box
                           key={i}
                           sx={{
-                            borderRadius: 2, p: 1.5, textAlign: 'center', minWidth: 72,
+                            borderRadius: 2, p: { xs: 1, sm: 1.5 }, textAlign: 'center', minWidth: { xs: 60, sm: 72 },
                             background: isToday
                               ? (active ? 'rgba(0,212,255,0.12)' : 'rgba(255,255,255,0.04)')
                               : (active ? 'rgba(13,33,55,0.8)' : 'rgba(13,33,55,0.4)'),
@@ -340,21 +356,21 @@ const UserDashboard = () => {
                           }}
                         >
                           <Typography variant="caption" fontWeight={700}
-                            sx={{ color: isToday ? '#00D4FF' : (active ? '#E8F4FD' : '#8BAFC7'), display: 'block' }}>
+                            sx={{ color: isToday ? '#00D4FF' : (active ? '#E8F4FD' : '#8BAFC7'), display: 'block', fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
                             {day}
                           </Typography>
                           {active ? (
                             <>
-                              <EventAvailableIcon sx={{ fontSize: 14, color: isToday ? '#00D4FF' : '#00E676', my: 0.3 }} />
-                              <Typography variant="caption" sx={{ color: '#8BAFC7', display: 'block', fontSize: 10 }}>
+                              <EventAvailableIcon sx={{ fontSize: { xs: 12, sm: 14 }, color: isToday ? '#00D4FF' : '#00E676', my: 0.3 }} />
+                              <Typography variant="caption" sx={{ color: '#8BAFC7', display: 'block', fontSize: { xs: '0.65rem', sm: '0.7rem' } }}>
                                 {entry.start_time}
                               </Typography>
-                              <Typography variant="caption" sx={{ color: '#8BAFC7', display: 'block', fontSize: 10 }}>
+                              <Typography variant="caption" sx={{ color: '#8BAFC7', display: 'block', fontSize: { xs: '0.65rem', sm: '0.7rem' } }}>
                                 {entry.end_time}
                               </Typography>
                             </>
                           ) : (
-                            <EventBusyIcon sx={{ fontSize: 14, color: '#8BAFC7', my: 0.3, display: 'block', mx: 'auto' }} />
+                            <EventBusyIcon sx={{ fontSize: { xs: 12, sm: 14 }, color: '#8BAFC7', my: 0.3, display: 'block', mx: 'auto' }} />
                           )}
                         </Box>
                       );
@@ -388,32 +404,33 @@ const UserDashboard = () => {
                         sx={{
                           display: 'flex',
                           alignItems: 'center',
-                          p: 2,
+                          p: { xs: 1.5, sm: 2 },
                           mb: 1,
                           background: 'rgba(13,33,55,0.6)',
                           border: '1px solid rgba(0,212,255,0.08)',
                           borderRadius: 2,
-                          gap: 2,
+                          gap: { xs: 1, sm: 2 },
+                          flexWrap: 'wrap',
                         }}
                       >
-                        <Box sx={{ p: 1, borderRadius: 1.5, background: entry.clock_out ? 'rgba(0,212,255,0.1)' : 'rgba(0,230,118,0.15)', display: 'flex' }}>
-                          <AccessTimeIcon sx={{ fontSize: 18, color: entry.clock_out ? '#00D4FF' : '#00E676' }} />
+                        <Box sx={{ p: { xs: 0.8, sm: 1 }, borderRadius: 1.5, background: entry.clock_out ? 'rgba(0,212,255,0.1)' : 'rgba(0,230,118,0.15)', display: 'flex' }}>
+                          <AccessTimeIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: entry.clock_out ? '#00D4FF' : '#00E676' }} />
                         </Box>
-                        <Box sx={{ flex: 1 }}>
-                          <Typography variant="body2" fontWeight={600} sx={{ color: '#E8F4FD' }}>
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                          <Typography variant="body2" fontWeight={600} sx={{ color: '#E8F4FD', fontSize: { xs: '0.85rem', sm: '0.875rem' } }}>
                             {new Date(entry.clock_in).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                           </Typography>
-                          <Typography variant="caption" sx={{ color: '#8BAFC7' }}>
+                          <Typography variant="caption" sx={{ color: '#8BAFC7', fontSize: { xs: '0.75rem', sm: '0.8rem' } }}>
                             {new Date(entry.clock_in).toLocaleTimeString()}
                             {entry.clock_out && ` → ${new Date(entry.clock_out).toLocaleTimeString()}`}
                           </Typography>
                         </Box>
                         {duration ? (
-                          <Typography variant="body2" fontWeight={600} sx={{ color: '#00D4FF' }}>
+                          <Typography variant="body2" fontWeight={600} sx={{ color: '#00D4FF', fontSize: { xs: '0.85rem', sm: '0.875rem' } }}>
                             {formatHours(duration)}
                           </Typography>
                         ) : (
-                          <Chip label="Active" size="small" sx={{ bgcolor: 'rgba(0,230,118,0.2)', color: '#00E676', fontSize: 11 }} />
+                          <Chip label="Active" size="small" sx={{ bgcolor: 'rgba(0,230,118,0.2)', color: '#00E676', fontSize: { xs: '0.7rem', sm: '0.75rem' } }} />
                         )}
                       </Box>
                     </motion.div>
