@@ -20,7 +20,10 @@ class RegisterRequest(BaseModel):
 
 @router.post("/login")
 async def login(request: LoginRequest, db: Session = Depends(get_db)):
-    user = authenticate_user(db, request.email, request.password)
+    try:
+        user = authenticate_user(db, request.email, request.password)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
