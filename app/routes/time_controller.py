@@ -14,8 +14,8 @@ def entry_to_dict(entry):
     return {
         "id": entry.id,
         "user_id": entry.user_id,
-        "clock_in": entry.clock_in.isoformat() if entry.clock_in else None,
-        "clock_out": entry.clock_out.isoformat() if entry.clock_out else None,
+        "clock_in": entry.clock_in.isoformat() + 'Z' if entry.clock_in else None,
+        "clock_out": entry.clock_out.isoformat() + 'Z' if entry.clock_out else None,
     }
 
 @router.post("/clock-in")

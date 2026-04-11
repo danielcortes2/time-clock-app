@@ -19,7 +19,14 @@ def get_engine():
     global _engine
     if _engine is None:
         db_settings = get_db_settings()
-        _engine = create_engine(db_settings.database_url, echo=False)
+        _engine = create_engine(
+            db_settings.database_url,
+            echo=False,
+            pool_pre_ping=True,  # Check connection before using
+            pool_recycle=3600,   # Recycle connections after 1 hour
+            pool_size=10,        # Connection pool size
+            max_overflow=20      # Max overflow connections
+        )
     return _engine
 
 def get_session_local():

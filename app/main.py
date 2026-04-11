@@ -13,6 +13,7 @@ from app.routes.auth_controller import router as auth_router
 from app.routes.time_controller import router as time_router
 from app.routes.schedule_controller import router as schedule_router
 from fastapi.middleware.cors import CORSMiddleware
+import os
 # from fastapi.middleware.base import BaseHTTPMiddleware
 
 # class StripPrefixMiddleware(BaseHTTPMiddleware):
@@ -40,14 +41,13 @@ app = FastAPI(
 
 # app.add_middleware(StripPrefixMiddleware, prefix="/api")
 
+# Get CORS origins from environment
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173,https://time-clock-app-sqvj.vercel.app,https://*.vercel.app")
+allow_origins = [origin.strip() for origin in cors_origins.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "https://time-clock-app-sqvj.vercel.app",
-        "https://*.vercel.app",
-    ],
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

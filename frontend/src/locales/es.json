@@ -1,0 +1,78 @@
+{
+  "app": {
+    "name": "TimeClock"
+  },
+  "login": {
+    "title": "Inicia sesión en tu espacio de trabajo",
+    "email": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "signIn": "Iniciar sesión",
+    "fillFields": "Por favor, completa todos los campos",
+    "invalidCredentials": "Correo electrónico o contraseña inválidos",
+    "contactAdmin": "Contacta a tu administrador para obtener acceso"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches"
+    },
+    "clockIn": "Marcar entrada",
+    "clockOut": "Marcar salida",
+    "notClockedIn": "Actualmente no estás marcado como presente",
+    "sessionStarted": "Sesión iniciada",
+    "stats": {
+      "todayHours": "Horas de hoy",
+      "thisWeek": "Esta semana",
+      "totalEntries": "Total de entradas"
+    },
+    "schedule": {
+      "title": "Mi horario",
+      "days": ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
+    },
+    "activity": {
+      "title": "Actividad reciente",
+      "noEntries": "¡Aún no hay entradas — marca entrada para comenzar!",
+      "active": "Activo"
+    },
+    "logout": "Cerrar sesión"
+  },
+  "admin": {
+    "weeklySchedule": "Horario semanal",
+    "employees": "Empleados",
+    "createEmployee": "Crear nuevo empleado",
+    "deleteUser": "Eliminar usuario",
+    "admin": "Administrador",
+    "manageSchedule": "Gestionar horario",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar este usuario?",
+    "delete": "Eliminar",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "role": "Rol",
+    "actions": "Acciones",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "fullName": "Nombre completo",
+    "password": "Contraseña",
+    "create": "Crear",
+    "userCreated": "Usuario creado exitosamente",
+    "userDeleted": "Usuario eliminado exitosamente",
+    "scheduleSaved": "Horario guardado exitosamente",
+    "clockIn": "Entrada",
+    "clockOut": "Salida",
+    "duration": "Duración",
+    "status": "Estado"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No"
+  }
+}

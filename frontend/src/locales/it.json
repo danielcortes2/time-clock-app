@@ -1,0 +1,78 @@
+{
+  "app": {
+    "name": "TimeClock"
+  },
+  "login": {
+    "title": "Accedi al tuo spazio di lavoro",
+    "email": "Indirizzo e-mail",
+    "password": "Password",
+    "showPassword": "Mostra password",
+    "hidePassword": "Nascondi password",
+    "signIn": "Accedi",
+    "fillFields": "Si prega di compilare tutti i campi",
+    "invalidCredentials": "Indirizzo e-mail o password non validi",
+    "contactAdmin": "Contatta il tuo amministratore per ottenere l'accesso"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Buongiorno",
+      "afternoon": "Buon pomeriggio",
+      "evening": "Buonasera"
+    },
+    "clockIn": "Timbrare entrata",
+    "clockOut": "Timbrare uscita",
+    "notClockedIn": "Al momento non sei timbrato",
+    "sessionStarted": "Sessione iniziata",
+    "stats": {
+      "todayHours": "Ore di oggi",
+      "thisWeek": "Questa settimana",
+      "totalEntries": "Totale voci"
+    },
+    "schedule": {
+      "title": "Il mio orario",
+      "days": ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"]
+    },
+    "activity": {
+      "title": "Attività recente",
+      "noEntries": "Ancora nessuna voce — timbra l'entrata per iniziare!",
+      "active": "Attivo"
+    },
+    "logout": "Disconnetti"
+  },
+  "admin": {
+    "weeklySchedule": "Orario settimanale",
+    "employees": "Dipendenti",
+    "createEmployee": "Crea nuovo dipendente",
+    "deleteUser": "Elimina utente",
+    "admin": "Amministratore",
+    "manageSchedule": "Gestisci orario",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "confirmDelete": "Sei sicuro di voler eliminare questo utente?",
+    "delete": "Elimina",
+    "name": "Nome",
+    "email": "E-mail",
+    "role": "Ruolo",
+    "actions": "Azioni",
+    "active": "Attivo",
+    "inactive": "Inattivo",
+    "fullName": "Nome completo",
+    "password": "Password",
+    "create": "Crea",
+    "userCreated": "Utente creato con successo",
+    "userDeleted": "Utente eliminato con successo",
+    "scheduleSaved": "Orario salvato con successo",
+    "clockIn": "Entrata",
+    "clockOut": "Uscita",
+    "duration": "Durata",
+    "status": "Stato"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "confirm": "Conferma",
+    "yes": "Sì",
+    "no": "No"
+  }
+}

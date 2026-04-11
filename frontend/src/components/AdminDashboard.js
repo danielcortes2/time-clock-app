@@ -9,6 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllEntries, createUser as apiCreateUser, getUsers, getUserSchedule, setUserSchedule, deleteUser, exportEntries } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -129,10 +130,10 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
         },
       }}
     >
-      <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
+      <DialogTitle component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
         <CalendarMonthIcon sx={{ color: '#00D4FF' }} />
         <Box>
-          <Typography variant="h6" fontWeight={600}>Weekly Schedule</Typography>
+          <Typography variant="h6" fontWeight={600}>{t('admin.weeklySchedule')}</Typography>
           {user && (
             <Typography variant="caption" sx={{ color: '#8BAFC7' }}>
               {user.full_name || user.email}
@@ -357,10 +358,10 @@ const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Clock In</TableCell>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Clock Out</TableCell>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Duration</TableCell>
-                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>Status</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>{t('admin.clockIn')}</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>{t('admin.clockOut')}</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>{t('admin.duration')}</TableCell>
+                      <TableCell sx={{ color: '#8BAFC7', borderColor: 'rgba(255,255,255,0.05)', fontSize: { xs: '0.75rem', sm: '0.875rem' }, whiteSpace: 'nowrap' }}>{t('admin.status')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -417,6 +418,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
 
   const showSnackbar = (message, severity = 'success') =>
     setSnackbar({ open: true, message, severity });
@@ -568,7 +570,7 @@ const AdminDashboard = () => {
           </Tooltip>
 
           {/* Logout — icon-only on mobile */}
-          <Tooltip title="Logout">
+          <Tooltip title={t('dashboard.logout')}>
             {isMobile ? (
               <IconButton
                 size="small"
@@ -580,7 +582,7 @@ const AdminDashboard = () => {
             ) : (
               <Button variant="outlined" startIcon={<LogoutIcon />} onClick={logout}
                 sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}>
-                Logout
+                {t('dashboard.logout')}
               </Button>
             )}
           </Tooltip>
@@ -598,7 +600,7 @@ const AdminDashboard = () => {
         {/* Users & Entries */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 2 }}>
-            <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD' }}>Employees</Typography>
+            <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD' }}>{t('admin.employees')}</Typography>
             <TextField
               size="small" placeholder="Search..." value={search}
               onChange={e => setSearch(e.target.value)}
@@ -636,9 +638,9 @@ const AdminDashboard = () => {
         fullWidth
         PaperProps={{ sx: { background: '#0A1929', border: isMobile ? 'none' : '1px solid rgba(0,212,255,0.15)', borderRadius: isMobile ? 0 : 3 } }}
       >
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <DialogTitle component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <PersonAddIcon sx={{ color: '#00D4FF' }} />
-          <Typography variant="h6" fontWeight={600}>Create New Employee</Typography>
+          <Typography variant="h6" fontWeight={600}>{t('admin.createEmployee')}</Typography>
         </DialogTitle>
         <DialogContent sx={{ pt: '8px!important' }}>
           <AnimatePresence>
@@ -692,9 +694,9 @@ const AdminDashboard = () => {
       {/* Delete Confirmation Dialog */}
       <Dialog open={!!deleteTarget} onClose={() => setDeleteTarget(null)}
         PaperProps={{ sx: { background: '#0A1929', border: '1px solid rgba(255,107,53,0.15)', borderRadius: 3 } }}>
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <DialogTitle component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <DeleteIcon sx={{ color: '#FF6B35' }} />
-          <Typography variant="h6" fontWeight={600}>Delete User</Typography>
+          <Typography variant="h6" fontWeight={600}>{t('admin.deleteUser')}</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography sx={{ color: '#E8F4FD' }}>

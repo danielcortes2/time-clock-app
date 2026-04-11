@@ -1,0 +1,78 @@
+{
+  "app": {
+    "name": "TimeClock"
+  },
+  "login": {
+    "title": "Se connecter à votre espace de travail",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "signIn": "Se connecter",
+    "fillFields": "Veuillez remplir tous les champs",
+    "invalidCredentials": "Adresse e-mail ou mot de passe invalide",
+    "contactAdmin": "Contactez votre administrateur pour obtenir l'accès"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Bonjour",
+      "afternoon": "Bon après-midi",
+      "evening": "Bonsoir"
+    },
+    "clockIn": "Pointer l'entrée",
+    "clockOut": "Pointer la sortie",
+    "notClockedIn": "Vous n'êtes actuellement pas pointé",
+    "sessionStarted": "Session commencée",
+    "stats": {
+      "todayHours": "Heures d'aujourd'hui",
+      "thisWeek": "Cette semaine",
+      "totalEntries": "Total des entrées"
+    },
+    "schedule": {
+      "title": "Mon horaire",
+      "days": ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+    },
+    "activity": {
+      "title": "Activité récente",
+      "noEntries": "Aucune entrée pour l'instant — pointez l'entrée pour commencer !",
+      "active": "Actif"
+    },
+    "logout": "Se déconnecter"
+  },
+  "admin": {
+    "weeklySchedule": "Horaire hebdomadaire",
+    "employees": "Employés",
+    "createEmployee": "Créer un nouvel employé",
+    "deleteUser": "Supprimer l'utilisateur",
+    "admin": "Administrateur",
+    "manageSchedule": "Gérer l'horaire",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
+    "delete": "Supprimer",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "actions": "Actions",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "fullName": "Nom complet",
+    "password": "Mot de passe",
+    "create": "Créer",
+    "userCreated": "Utilisateur créé avec succès",
+    "userDeleted": "Utilisateur supprimé avec succès",
+    "scheduleSaved": "Horaire sauvegardé avec succès",
+    "clockIn": "Entrée",
+    "clockOut": "Sortie",
+    "duration": "Durée",
+    "status": "Statut"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non"
+  }
+}

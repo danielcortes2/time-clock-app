@@ -1,0 +1,78 @@
+{
+  "app": {
+    "name": "TimeClock"
+  },
+  "login": {
+    "title": "Melden Sie sich in Ihrem Arbeitsbereich an",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort verbergen",
+    "signIn": "Anmelden",
+    "fillFields": "Bitte füllen Sie alle Felder aus",
+    "invalidCredentials": "Ungültige E-Mail-Adresse oder Passwort",
+    "contactAdmin": "Wenden Sie sich an Ihren Administrator, um Zugang zu erhalten"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend"
+    },
+    "clockIn": "Einstempeln",
+    "clockOut": "Ausstempeln",
+    "notClockedIn": "Sie sind derzeit nicht eingestempelt",
+    "sessionStarted": "Sitzung gestartet",
+    "stats": {
+      "todayHours": "Stunden heute",
+      "thisWeek": "Diese Woche",
+      "totalEntries": "Gesamt Einträge"
+    },
+    "schedule": {
+      "title": "Mein Zeitplan",
+      "days": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+    },
+    "activity": {
+      "title": "Kürzliche Aktivität",
+      "noEntries": "Noch keine Einträge — stempeln Sie ein, um zu beginnen!",
+      "active": "Aktiv"
+    },
+    "logout": "Abmelden"
+  },
+  "admin": {
+    "weeklySchedule": "Wöchentlicher Zeitplan",
+    "employees": "Mitarbeiter",
+    "createEmployee": "Neuen Mitarbeiter erstellen",
+    "deleteUser": "Benutzer löschen",
+    "admin": "Administrator",
+    "manageSchedule": "Zeitplan verwalten",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "confirmDelete": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
+    "delete": "Löschen",
+    "name": "Name",
+    "email": "E-Mail",
+    "role": "Rolle",
+    "actions": "Aktionen",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "fullName": "Vollständiger Name",
+    "password": "Passwort",
+    "create": "Erstellen",
+    "userCreated": "Benutzer erfolgreich erstellt",
+    "userDeleted": "Benutzer erfolgreich gelöscht",
+    "scheduleSaved": "Zeitplan erfolgreich gespeichert",
+    "clockIn": "Einstempeln",
+    "clockOut": "Ausstempeln",
+    "duration": "Dauer",
+    "status": "Status"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "confirm": "Bestätigen",
+    "yes": "Ja",
+    "no": "Nein"
+  }
+}

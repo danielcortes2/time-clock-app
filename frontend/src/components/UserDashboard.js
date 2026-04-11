@@ -6,6 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { getMyEntries, clockIn, clockOut, getMe, getMySchedule } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -67,6 +68,7 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
 
   // Clock tick
   useEffect(() => {
@@ -139,7 +141,7 @@ const UserDashboard = () => {
     : user?.email?.[0]?.toUpperCase() || '?';
 
   const greetHour = currentTime.getHours();
-  const greeting = greetHour < 12 ? 'Good morning' : greetHour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = greetHour < 12 ? t('dashboard.greeting.morning') : greetHour < 18 ? t('dashboard.greeting.afternoon') : t('dashboard.greeting.evening');
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -159,7 +161,7 @@ const UserDashboard = () => {
         >
           <AccessTimeIcon sx={{ color: '#00D4FF', fontSize: 28 }} />
           <Typography variant="h6" fontWeight={700} sx={{ color: '#E8F4FD', flex: 1, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>
-            TimeClock
+            {t('app.name')}
           </Typography>
           <Avatar sx={{ bgcolor: 'rgba(0,212,255,0.2)', color: '#00D4FF', width: { xs: 28, sm: 34 }, height: { xs: 28, sm: 34 }, fontSize: { xs: 12, sm: 14 }, fontWeight: 700 }}>
             {initials}
@@ -183,7 +185,7 @@ const UserDashboard = () => {
               size="small"
               sx={{ borderColor: 'rgba(255,82,82,0.4)', color: '#FF5252', '&:hover': { borderColor: '#FF5252', bgcolor: 'rgba(255,82,82,0.08)' } }}
             >
-              Logout
+              {t('dashboard.logout')}
             </Button>
           )}
         </Box>
@@ -281,7 +283,7 @@ const UserDashboard = () => {
                           : <LoginIcon sx={{ fontSize: { xs: 32, sm: 40 }, color: 'white' }} />
                         }
                         <Typography variant="caption" fontWeight={700} sx={{ color: 'white', fontSize: { xs: 11, sm: 13 }, letterSpacing: 1, textTransform: 'uppercase' }}>
-                          {isClockedIn ? 'Clock Out' : 'Clock In'}
+                          {isClockedIn ? t('dashboard.clockOut') : t('dashboard.clockIn')}
                         </Typography>
                       </>
                     )}
@@ -305,12 +307,12 @@ const UserDashboard = () => {
                         }}
                       />
                       <Typography variant="caption" sx={{ display: 'block', textAlign: 'center', color: '#8BAFC7', mt: 1 }}>
-                        Session started {activeEntry ? new Date(activeEntry.clock_in).toLocaleTimeString() : ''}
+                        {t('dashboard.sessionStarted')} {activeEntry ? new Date(activeEntry.clock_in).toLocaleTimeString() : ''}
                       </Typography>
                     </motion.div>
                   ) : (
                     <motion.div key="idle" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                      <Typography variant="body2" sx={{ color: '#8BAFC7' }}>You are currently not clocked in</Typography>
+                      <Typography variant="body2" sx={{ color: '#8BAFC7' }}>{t('dashboard.notClockedIn')}</Typography>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -320,9 +322,9 @@ const UserDashboard = () => {
             {/* Stats */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
               <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, mb: 4, flexWrap: 'wrap', justifyContent: 'center' }}>
-                <StatCard icon={<CalendarTodayIcon />} label="Today's Hours" value={formatHours(todayMs)} color="#00D4FF" />
-                <StatCard icon={<TimerIcon />} label="This Week" value={formatHours(weeklyMs)} color="#7C4DFF" />
-                <StatCard icon={<HistoryIcon />} label="Total Entries" value={entries.length} color="#00E676" />
+                <StatCard icon={<CalendarTodayIcon />} label={t('dashboard.stats.todayHours')} value={formatHours(todayMs)} color="#00D4FF" />
+                <StatCard icon={<TimerIcon />} label={t('dashboard.stats.thisWeek')} value={formatHours(weeklyMs)} color="#7C4DFF" />
+                <StatCard icon={<HistoryIcon />} label={t('dashboard.stats.totalEntries')} value={entries.length} color="#00E676" />
               </Box>
             </motion.div>
 
@@ -332,10 +334,10 @@ const UserDashboard = () => {
                 <Box sx={{ mb: 4 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                     <CalendarMonthIcon sx={{ color: '#00D4FF', fontSize: 20 }} />
-                    <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD' }}>My Schedule</Typography>
+                    <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD' }}>{t('dashboard.schedule.title')}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', gap: { xs: 0.5, sm: 1 }, flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day, i) => {
+                    {t('dashboard.schedule.days', { returnObjects: true }).map((day, i) => {
                       const entry = schedule.find(s => s.day_of_week === i);
                       // JS getDay(): 0=Sun,1=Mon...6=Sat => our i: 0=Mon...6=Sun
                       const todayJs = new Date().getDay();
@@ -382,11 +384,11 @@ const UserDashboard = () => {
 
             {/* Entry History */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-              <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD', mb: 2 }}>Recent Activity</Typography>
+              <Typography variant="h6" fontWeight={600} sx={{ color: '#E8F4FD', mb: 2 }}>{t('dashboard.activity.title')}</Typography>
               {entries.length === 0 ? (
                 <Box sx={{ textAlign: 'center', py: 6 }}>
                   <HistoryIcon sx={{ fontSize: 48, color: '#8BAFC7', mb: 1 }} />
-                  <Typography sx={{ color: '#8BAFC7' }}>No entries yet — clock in to get started!</Typography>
+                  <Typography sx={{ color: '#8BAFC7' }}>{t('dashboard.activity.noEntries')}</Typography>
                 </Box>
               ) : (
                 [...entries].reverse().slice(0, 10).map((entry, i) => {
@@ -430,7 +432,7 @@ const UserDashboard = () => {
                             {formatHours(duration)}
                           </Typography>
                         ) : (
-                          <Chip label="Active" size="small" sx={{ bgcolor: 'rgba(0,230,118,0.2)', color: '#00E676', fontSize: { xs: '0.7rem', sm: '0.75rem' } }} />
+                          <Chip label={t('dashboard.activity.active')} size="small" sx={{ bgcolor: 'rgba(0,230,118,0.2)', color: '#00E676', fontSize: { xs: '0.7rem', sm: '0.75rem' } }} />
                         )}
                       </Box>
                     </motion.div>

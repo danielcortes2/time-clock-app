@@ -6,6 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { login, getMe } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
@@ -36,11 +37,12 @@ const Login = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
 
   const handleLogin = async (e) => {
     e?.preventDefault();
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError(t('login.fillFields'));
       return;
     }
     setLoading(true);
@@ -51,7 +53,7 @@ const Login = () => {
       const user = await getMe();
       navigate(user.is_superuser ? '/admin' : '/user');
     } catch (err) {
-      setError('Invalid email or password');
+      setError(t('login.invalidCredentials'));
     } finally {
       setLoading(false);
     }
@@ -143,10 +145,10 @@ const Login = () => {
               fontWeight={700}
               sx={{ color: '#E8F4FD', letterSpacing: -0.5, fontSize: { xs: '1.55rem', sm: '1.9rem' }, lineHeight: 1.15 }}
             >
-              TimeClock
+              {t('app.name')}
             </Typography>
             <Typography variant="body2" sx={{ color: '#8BAFC7', mt: 0.5, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
-              Sign in to your workspace
+              {t('login.title')}
             </Typography>
           </Box>
 
@@ -173,7 +175,7 @@ const Login = () => {
 
             <TextField
               fullWidth
-              label="Email Address"
+              label={t('login.email')}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -191,7 +193,7 @@ const Login = () => {
 
             <TextField
               fullWidth
-              label="Password"
+              label={t('login.password')}
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -209,7 +211,7 @@ const Login = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
                       size="small"
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')}
                     >
                       {showPassword
                         ? <VisibilityOffIcon sx={{ color: '#8BAFC7', fontSize: 18 }} />
@@ -237,7 +239,7 @@ const Login = () => {
                   minHeight: 48,
                 }}
               >
-                {loading ? <CircularProgress size={22} color="inherit" /> : 'Sign In'}
+                {loading ? <CircularProgress size={22} color="inherit" /> : t('login.signIn')}
               </Button>
             </motion.div>
           </Box>
@@ -246,7 +248,7 @@ const Login = () => {
             variant="caption"
             sx={{ display: 'block', textAlign: 'center', color: '#8BAFC7', mt: 3, fontSize: { xs: '0.72rem', sm: '0.75rem' }, lineHeight: 1.4 }}
           >
-            Contact your administrator to get access
+            {t('login.contactAdmin')}
           </Typography>
         </Box>
       </motion.div>

@@ -1,0 +1,78 @@
+{
+  "app": {
+    "name": "TimeClock"
+  },
+  "login": {
+    "title": "Sign in to your workspace",
+    "email": "Email Address",
+    "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "signIn": "Sign In",
+    "fillFields": "Please fill in all fields",
+    "invalidCredentials": "Invalid email or password",
+    "contactAdmin": "Contact your administrator to get access"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "clockIn": "Clock In",
+    "clockOut": "Clock Out",
+    "notClockedIn": "You are currently not clocked in",
+    "sessionStarted": "Session started",
+    "stats": {
+      "todayHours": "Today's Hours",
+      "thisWeek": "This Week",
+      "totalEntries": "Total Entries"
+    },
+    "schedule": {
+      "title": "My Schedule",
+      "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "noEntries": "No entries yet — clock in to get started!",
+      "active": "Active"
+    },
+    "logout": "Logout"
+  },
+  "admin": {
+    "weeklySchedule": "Weekly Schedule",
+    "employees": "Employees",
+    "createEmployee": "Create New Employee",
+    "deleteUser": "Delete User",
+    "admin": "Admin",
+    "manageSchedule": "Manage schedule",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirmDelete": "Are you sure you want to delete this user?",
+    "delete": "Delete",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "actions": "Actions",
+    "active": "Active",
+    "inactive": "Inactive",
+    "fullName": "Full Name",
+    "password": "Password",
+    "create": "Create",
+    "userCreated": "User created successfully",
+    "userDeleted": "User deleted successfully",
+    "scheduleSaved": "Schedule saved successfully",
+    "clockIn": "Clock In",
+    "clockOut": "Clock Out",
+    "duration": "Duration",
+    "status": "Status"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  }
+}
