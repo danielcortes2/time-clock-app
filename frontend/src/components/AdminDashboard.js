@@ -253,6 +253,7 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
 // ─── User Row ────────────────────────────────────────────────────────────────
 const UserRow = ({ user, entries, index, onSchedule, onDelete }) => {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
   const userEntries = entries.filter(e => e.user_id === user.id);
   const isActive = userEntries.some(e => !e.clock_out);
 
