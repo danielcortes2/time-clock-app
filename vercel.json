@@ -7,7 +7,26 @@
       "config": {
         "distDir": "build"
       }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
     },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ],
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "cd frontend && npm run build"
+}
     {
       "src": "api/index.py",
       "use": "@vercel/python"
