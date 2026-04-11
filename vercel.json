@@ -19,24 +19,12 @@
       "dest": "/api/index.py"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/frontend/static/$1"
+      "handle": "filesystem"
     },
     {
-      "src": "/manifest.json",
-      "dest": "/frontend/manifest.json"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "/frontend/robots.txt"
-    },
-    {
-      "src": "/asset-manifest.json",
-      "dest": "/frontend/asset-manifest.json"
-    },
-    {
-      "src": "/(.*\\.[a-zA-Z0-9]+)$",
-      "dest": "/frontend/$1"
+      "src": "/((?!api).*)",
+      "dest": "/frontend/$1",
+      "check": true
     },
     {
       "src": "/(.*)",
