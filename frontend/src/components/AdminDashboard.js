@@ -74,6 +74,7 @@ const ScheduleDialog = ({ open, onClose, user, onSaved, showSnackbar }) => {
   const [saving, setSaving] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!open || !user) return;
